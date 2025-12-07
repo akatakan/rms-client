@@ -3,6 +3,8 @@ import styles from "../styles/Login.module.css"
 import { LockOutlined, ShopOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../services/authService";
 
 type FieldType = {
     username?: string;
@@ -12,10 +14,14 @@ type FieldType = {
 
 export default function Login(){
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
             setLoading(true);
+            await authService.login(values.username!,values.password!);
+            message.success('Giriş Başarılı');
+            navigate("/tables")
         } catch (error) {
             console.error('Login failed:', error);
             message.error('Invalid username or password');
@@ -24,7 +30,9 @@ export default function Login(){
         }
     }
 
-
+    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) =>{
+        console.log("Failed:", errorInfo)
+    }
     return (
         <Layout className={styles.layout}>
             <div className={styles.overlay}/>
@@ -36,6 +44,11 @@ export default function Login(){
                     <Title level={2}>Giriş Ekranı</Title>
                 </div>
                 <Form
+                    name="login"
+                    layout="vertical"
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
                     size="large"
                 >
                     <Form.Item<FieldType>
@@ -52,7 +65,7 @@ export default function Login(){
                         name="password"
                         rules={[{required:true,message:'Lütfen Şifre adını giriniz!'}]}
                     >
-                    <Input
+                    <Input.Password
                         prefix={<LockOutlined/>}
                         placeholder="Password"
                         style={{borderRadius: '8px'}}
