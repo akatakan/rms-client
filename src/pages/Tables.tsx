@@ -1,10 +1,7 @@
 
 
-export default function Login(){
-
+export default function Tables() {
     return (
-        <>
-            <p>Tables</p>
-        </>
+        <p>Tables</p>
     )
 }
