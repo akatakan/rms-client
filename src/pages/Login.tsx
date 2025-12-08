@@ -24,7 +24,7 @@ export default function Login(){
             navigate("/tables")
         } catch (error) {
             console.error('Login failed:', error);
-            message.error('Invalid username or password');
+            message.error('Kullanıcı adı veya şifre yanlış');
         } finally {
             setLoading(false);
         }
