@@ -1,14 +1,20 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { authService } from "../services/authService";
+
+import { useAuth } from "../context/AuthContext";
 
 interface Props{
     allowedRoles: string[];
 }
 
-const user = authService.getUser();
 
 export const ProtectedRoute = ({ allowedRoles }: Props) =>{
-    if(!authService.isAuthenticated()){
+    const { isAuthenticated, user, isLoading } = useAuth();
+
+    if (isLoading) {
+        return <div>Yükleniyor...</div>;
+    }
+
+    if(!isAuthenticated || !user){
         return <Navigate to='/login' replace />;
     }
 

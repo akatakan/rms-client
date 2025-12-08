@@ -7,6 +7,7 @@ import { BarsOutlined, DollarOutlined, MenuFoldOutlined, MenuUnfoldOutlined, Tab
 import { useTheme } from "../context/ThemeContext"
 import { Header } from "antd/es/layout/layout"
 import { authService } from "../services/authService"
+import { useAuth } from "../context/AuthContext"
 
 
 
@@ -15,6 +16,7 @@ export const DashboardLayout: React.FC = () => {
     const {isDark,toggleTheme} = useTheme();
     const {token} = theme.useToken();
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const menuItems = [
         {
@@ -50,7 +52,7 @@ export const DashboardLayout: React.FC = () => {
             icon: <LogoutOutlined />,
             danger: true,
             onClick: () => {
-                authService.logout();
+                logout();
             }
         },
     ]

@@ -4,7 +4,7 @@ import { LockOutlined, ShopOutlined, UserOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 type FieldType = {
     username?: string;
@@ -15,11 +15,11 @@ type FieldType = {
 export default function Login(){
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const { login } = useAuth();
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         try {
             setLoading(true);
-            await authService.login(values.username!,values.password!);
+            await login(values.username!,values.password!);
             message.success('Giriş Başarılı');
             navigate("/tables")
         } catch (error) {

@@ -5,6 +5,7 @@ import Tables from './pages/Tables'
 import { ConfigProvider, theme } from 'antd'
 import { useTheme } from './context/ThemeContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
 
@@ -17,12 +18,12 @@ function App() {
         colorPrimary: '#ea580c',
         borderRadius: 8,
       },
-      components:{
+      components: {
         Layout: {
           siderBg: isDark ? '#141414' : '#ffffff',
           triggerBg: isDark ? '#1f1f1f' : '#f0f0f0',
         },
-        Menu:{
+        Menu: {
           itemBg: isDark ? '#141414' : '#ffffff',
           itemSelectedBg: isDark ? 'rgba(234, 88, 12, 0.2)' : '#fff7ed',
           itemSelectedColor: '#ea580c',
@@ -31,15 +32,17 @@ function App() {
         }
       }
     }}>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login/>} />
-        <Route element={<ProtectedRoute allowedRoles={['ADMIN']}/>}>
-          <Route element={<DashboardLayout/>}>
-            <Route path='/tables' element={<Tables/>}/>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+            <Route element={<DashboardLayout />}>
+              <Route path='/tables' element={<Tables />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </AuthProvider>
     </ConfigProvider>
   )
 }
