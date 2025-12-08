@@ -4,6 +4,7 @@ import { DashboardLayout } from './layouts/DashboardLayout'
 import Tables from './pages/Tables'
 import { ConfigProvider, theme } from 'antd'
 import { useTheme } from './context/ThemeContext'
+import { ProtectedRoute } from './components/ProtectedRoute'
 
 function App() {
 
@@ -33,8 +34,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login/>} />
-        <Route element={<DashboardLayout/>}>
-          <Route path='/tables' element={<Tables/>}/>
+        <Route element={<ProtectedRoute allowedRoles={['ADMIN']}/>}>
+          <Route element={<DashboardLayout/>}>
+            <Route path='/tables' element={<Tables/>}/>
+          </Route>
         </Route>
       </Routes>
     </ConfigProvider>

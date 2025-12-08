@@ -1,11 +1,12 @@
-import { Button, Layout, Menu, theme } from "antd"
+import { Avatar, Button, Dropdown, Layout, Menu, Space, theme } from "antd"
 import Sider from "antd/es/layout/Sider"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import styles from "../styles/Dashboard.module.css"
 import { useState } from "react"
-import { BarsOutlined, DollarOutlined, MenuFoldOutlined, MenuUnfoldOutlined, TableOutlined } from "@ant-design/icons"
-import { Header } from "antd/es/layout/layout"
+import { BarsOutlined, DollarOutlined, MenuFoldOutlined, MenuUnfoldOutlined, TableOutlined, SettingOutlined, UserOutlined, DownOutlined, LogoutOutlined } from "@ant-design/icons"
 import { useTheme } from "../context/ThemeContext"
+import { Header } from "antd/es/layout/layout"
+import { authService } from "../services/authService"
 
 
 
@@ -13,6 +14,7 @@ export const DashboardLayout: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
     const {isDark,toggleTheme} = useTheme();
     const {token} = theme.useToken();
+    const navigate = useNavigate();
 
     const menuItems = [
         {
@@ -29,6 +31,27 @@ export const DashboardLayout: React.FC = () => {
             key: "3",
             icon: <DollarOutlined />,
             label: "Ödeme"
+        },
+    ];
+
+    const dropdownItems = [
+        {
+            key: 'settings',
+            label: 'Ayarlar',
+            icon:<SettingOutlined/>,
+            onClick: () => navigate("/settings")
+        },
+        {
+            type: 'divider' as const,
+        },
+        {
+            key: 'logout',
+            label: 'Çıkış Yap',
+            icon: <LogoutOutlined />,
+            danger: true,
+            onClick: () => {
+                authService.logout();
+            }
         },
     ]
 
@@ -52,13 +75,22 @@ export const DashboardLayout: React.FC = () => {
                     items={menuItems}
                 />
             </Sider>
-            <Layout style={{minWidth:'100vw'}}>
-                <Header className={styles.header} style={{minWidth:'100vw',background:token.colorBgContainer}}>
+            <Layout style={{width:'100%'}}>
+                <Header className={styles.header} style={{width:'100%',background:token.colorBgContainer}}>
                     <Button type="text" onClick={()=>setCollapsed(!collapsed)}>
                         {collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
                     </Button>
                     <div className={styles.logout}>
                         <Button onClick={toggleTheme}>{isDark ? '☀️ Light' : '🌙 Dark'}</Button>
+                        <Dropdown menu={{items: dropdownItems }} trigger={['click']}>
+                            <a onClick={(e) => e.preventDefault()} style={{ color: 'inherit', cursor: 'pointer' }}>
+                                <Space>
+                                    <Avatar size="small" icon={<UserOutlined />} />
+                                    <span>{localStorage.getItem('username')}</span>
+                                    <DownOutlined style={{ fontSize: '12px' }} />
+                                </Space>
+                            </a>
+                        </Dropdown>
                     </div>
                 </Header>
                 <Outlet />

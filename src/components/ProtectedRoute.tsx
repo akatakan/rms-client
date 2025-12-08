@@ -1,13 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { authService } from "../services/authService";
 
 interface Props{
     allowedRoles: string[];
 }
 
-const user = {name:"dummy", role:"ADMIN"}
+const user = authService.getUser();
 
 export const ProtectedRoute = ({ allowedRoles }: Props) =>{
-    if(!user){
+    if(!authService.isAuthenticated()){
         return <Navigate to='/login' replace />;
     }
 
