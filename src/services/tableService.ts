@@ -10,7 +10,7 @@ export const tableService = {
     },
 
     updateStatus: async(id:string,status:string) => {
-        const response = await api.patch(`/tables/updateStatus/${id}/status`,{status})
+        const response = await api.patch(`/tables/updateStatus/${id}`,{status})
         return response.data;
     }
 }

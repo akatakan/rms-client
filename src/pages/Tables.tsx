@@ -10,7 +10,7 @@ export default function Tables() {
     if (error) return <Alert title="Hata" description="Masalar yüklenemedi" type="error" />;
 
     return (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]} style={{width:'100%', padding:'25px'}}>
             {tables?.map((table) => (
                 <Col key={table.id} span={6}>
                     <Badge.Ribbon text={table.status} color={table.status === 'AVAILABLE' ? 'green' : 'red'}>
@@ -20,7 +20,7 @@ export default function Tables() {
                             onClick={() => {
                                 updateStatusMutation.mutate({ 
                                     id: table.id, 
-                                    status: 'OCCUPIED' 
+                                    status: table.status === 'OCCUPIED' ? 'AVAILABLE': 'OCCUPIED'
                                 });
                             }}
                         >
