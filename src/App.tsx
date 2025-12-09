@@ -29,6 +29,12 @@ function App() {
           itemSelectedColor: '#ea580c',
           itemColor: '#64748b',
           itemHoverBg: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+        },
+        Typography: {
+          colorTextHeading: '#141414'
+        },
+        Input:{
+          colorTextPlaceholder: 'rgba(255,255,255,0.75)'
         }
       }
     }}>
@@ -36,7 +42,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+          <Route element={<ProtectedRoute allowedRoles={['ADMIN','WAITER']} />}>
             <Route element={<DashboardLayout />}>
               <Route path='/tables' element={<Tables />} />
             </Route>

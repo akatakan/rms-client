@@ -33,6 +33,7 @@ export default function Login(){
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) =>{
         console.log("Failed:", errorInfo)
     }
+    
     return (
         <Layout className={styles.layout}>
             <div className={styles.overlay}/>
@@ -67,7 +68,7 @@ export default function Login(){
                     >
                     <Input.Password
                         prefix={<LockOutlined/>}
-                        placeholder="Password"
+                        placeholder="Şifre"
                         style={{borderRadius: '8px'}}
                     />
                     </Form.Item>

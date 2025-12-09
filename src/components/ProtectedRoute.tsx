@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ allowedRoles }: Props) =>{
     if (isLoading) {
         return <div>Yükleniyor...</div>;
     }
-
+    
     if(!isAuthenticated || !user){
         return <Navigate to='/login' replace />;
     }

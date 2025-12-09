@@ -38,7 +38,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 16px;
+    margin: 0 auto 32px;
 }
 
 .logoIcon{
@@ -56,9 +56,10 @@
     border: 8px;
     border-color: #faad14;
     transition: 0.2s ease;
+    box-shadow: 0 4px 10px rgba(255, 165, 0, 0.4);
 }
 
 .btn:hover{
-    background-color: rgb(250, 173, 20) !important;
+    background-color: rgb(216, 148, 21) !important;
     transform: translateY(-2px);
 }
