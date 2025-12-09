@@ -6,6 +6,8 @@ import { ConfigProvider, theme } from 'antd'
 import { useTheme } from './context/ThemeContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
+import Orders from './pages/Orders'
+import Payments from './pages/Payments'
 
 function App() {
 
@@ -29,6 +31,9 @@ function App() {
           itemSelectedColor: '#ea580c',
           itemColor: '#64748b',
           itemHoverBg: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+          itemHeight:100,
+          itemMarginInline:0,
+          itemBorderRadius:0,
         },
         Typography: {
           colorTextHeading: '#141414'
@@ -45,6 +50,8 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={['ADMIN','WAITER']} />}>
             <Route element={<DashboardLayout />}>
               <Route path='/tables' element={<Tables />} />
+              <Route path='/orders' element={<Orders />} />
+              <Route path='/payments' element={<Payments />} />
             </Route>
           </Route>
         </Routes>
