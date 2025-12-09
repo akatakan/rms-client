@@ -1,10 +1,17 @@
-import { Spin, Alert, Card, Row, Col, Badge } from "antd";
-import { useTables, useUpdateTableStatus } from "../hooks/useTables";
+import { Spin, Alert, Card, Row, Col } from "antd";
+import { useTables } from "../hooks/useTables";
+import { TableStatus } from "../enums/table";
 
 export default function Tables() {
     const { data: tables, isLoading, error } = useTables();
     
-    const updateStatusMutation = useUpdateTableStatus();
+    const statusToColor = {
+        [TableStatus.AVAILABLE]: 'green',
+        [TableStatus.READY_TO_ORDER]:'blue',
+        [TableStatus.OCCUPIED]:"red",
+        [TableStatus.RESERVED]: 'gold',
+        [TableStatus.CLOSED]: 'gray'
+    }
 
     if (isLoading) return <Spin size="large" style={{ display: 'block', margin: '50px auto' }} />;
     if (error) return <Alert title="Hata" description="Masalar yüklenemedi" type="error" />;
@@ -13,20 +20,9 @@ export default function Tables() {
         <Row gutter={[16, 16]} style={{width:'100%', padding:'25px'}}>
             {tables?.map((table) => (
                 <Col key={table.id} span={6}>
-                    <Badge.Ribbon text={table.status} color={table.status === 'AVAILABLE' ? 'green' : 'red'}>
-                        <Card 
-                            title={table.table_number}
-                            hoverable
-                            onClick={() => {
-                                updateStatusMutation.mutate({ 
-                                    id: table.id, 
-                                    status: table.status === 'OCCUPIED' ? 'AVAILABLE': 'OCCUPIED'
-                                });
-                            }}
-                        >
-                            Kapasite: {table.capacity}
-                        </Card>
-                    </Badge.Ribbon>
+                    <Card style={{backgroundColor:statusToColor[table.status]}}>
+                        
+                    </Card>
                 </Col>
             ))}
         </Row>

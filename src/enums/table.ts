@@ -1,0 +1,7 @@
+export const TableStatus = {
+    AVAILABLE: 'AVAILABLE',
+    READY_TO_ORDER: 'READY_TO_ORDER',
+    OCCUPIED: 'OCCUPIED',
+    RESERVED: 'RESERVED',
+    CLOSED: 'CLOSED',
+}

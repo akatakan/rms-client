@@ -1,6 +1,6 @@
 import { Avatar, Badge, Button, Dropdown, Layout, Menu, Space, theme } from "antd"
 import Sider from "antd/es/layout/Sider"
-import { Outlet, useNavigate } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import styles from "../styles/Dashboard.module.css"
 import { useState } from "react"
 import { BarsOutlined, MenuFoldOutlined, MenuUnfoldOutlined, TableOutlined, SettingOutlined, UserOutlined, DownOutlined, LogoutOutlined, CreditCardOutlined, SunOutlined, MoonOutlined, BellOutlined } from "@ant-design/icons"
@@ -8,12 +8,14 @@ import { useTheme } from "../context/ThemeContext"
 import { Header } from "antd/es/layout/layout"
 import { useAuth } from "../context/AuthContext"
 import { Role } from "../enums/role"
+import Title from "antd/es/typography/Title"
 
 
 
 
 export const DashboardLayout: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
+    const  location  = useLocation();
     const { isDark, toggleTheme } = useTheme();
     const { token } = theme.useToken();
     const navigate = useNavigate();
@@ -26,6 +28,8 @@ export const DashboardLayout: React.FC = () => {
     }
 
     const user = JSON.parse(userJson);
+
+    
 
     const menuItems = [
         {
@@ -73,6 +77,8 @@ export const DashboardLayout: React.FC = () => {
         return item.role.includes(user.role)
     })
 
+    const activeLoc = filteredMenuItems.find(item => item.key === location.pathname);
+    const currentTitle = activeLoc ? activeLoc.label : "Anasayfa"
     return (
         <Layout className={styles.layout}>
             <Sider
@@ -97,9 +103,12 @@ export const DashboardLayout: React.FC = () => {
             </Sider>
             <Layout style={{ width: '100%' }}>
                 <Header className={styles.header} style={{ width: '100%', background: token.colorBgContainer }}>
-                    <Button type="text" onClick={() => setCollapsed(!collapsed)}>
-                        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    </Button>
+                    <Space>
+                        <Button type="text" onClick={() => setCollapsed(!collapsed)}>
+                            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        </Button>
+                        <Title style={{color:'#ffff'}}>{currentTitle}</Title>
+                    </Space>
                     <div className={styles.logout}>
                         <Button shape="circle" icon={isDark ? <SunOutlined /> : <MoonOutlined />} style={{ backgroundColor: isDark ? '#ffffff' : '#000000', color: isDark ? '#000' : '#fff' }} onClick={toggleTheme} />
                         <Badge count={3} size="small">
