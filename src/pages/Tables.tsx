@@ -13,6 +13,7 @@ import { TableStatus } from "../enums/table";
 import styles from '../styles/Tables.module.css'
 import Title from "antd/es/typography/Title";
 import Paragraph from "antd/es/typography/Paragraph";
+import { useTheme } from "../context/ThemeContext";
 
 
 const statusConfig = {
@@ -60,6 +61,8 @@ const statusConfig = {
 
 export default function Tables() {
     const { data: tables, isLoading, error } = useTables();
+    const {isDark} = useTheme();
+
 
     if (isLoading) return <Spin size="large" style={{ display: 'block', margin: '50px auto' }} />;
     if (error) return <Alert title="Hata" description="Masalar yüklenemedi" type="error" style={{ margin: '25px' }} />;
@@ -69,27 +72,27 @@ export default function Tables() {
             {tables?.map((table) => {
                 const config = statusConfig[table.status] || statusConfig[TableStatus.CLOSED]
                 return (
-                    <Col key={table.id} xs={24} sm={12} md={8} lg={6} xl={6}>
+                    <Col key={table.id} xs={24} sm={12} md={8} lg={6} xl={6} style={{display:"flex"}}>
                         <Card
                             hoverable
                             variant='outlined'
                             className={styles.tableCards}
-                            style={{borderColor:config.color}}
+                            style={{borderColor:config.color,backgroundColor:isDark ? "rgba(255, 255, 255, 0.1)":'#fff'}}
                         >
-                            <Space orientation="horizontal" size='middle' style={{width:'100%',marginLeft:'10px'}}>
+                            <Tag className={styles.statusTag} style={{backgroundColor:config.bgColor,color:config.color}}>{config.label}</Tag>
+                            <div className={styles.cardContent}>
                                 <div className={styles.iconBg} style={{backgroundColor:config.bgColor}}>
                                     {config.icon}
                                 </div>
                                 <div>
-                                    <Title level={4}>{`${table.location.location} Masa - ${table.table_number}`}</Title>
-                                    <Paragraph ellipsis={{
-                                    }}><TeamOutlined/>{` ${table.capacity} Kişilik`}</Paragraph>
+                                    <Title level={4}>{`${table.location.location} - ${table.table_number}`}</Title>
+                                    <Paragraph><TeamOutlined style={{marginRight:4}}/>{`${table.capacity} Kişilik`}</Paragraph>
                                 </div>
-                                <Tag style={{backgroundColor:config.bgColor,color:config.color}}>{config.label}</Tag>
-                            </Space>
+                                
+                            </div>
                             <div style={{backgroundColor:config.bgColor}} className={styles.bottomBar}>
                                 {config.bottomStatusIcon}
-                                <Paragraph style={{margin:0,color:config.color}}>
+                                <Paragraph style={{margin:0,color:config.color,fontWeight:500}}>
                                     {config.description}   
                                 </Paragraph>
                             </div>
