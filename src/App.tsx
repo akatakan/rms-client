@@ -8,6 +8,9 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import Orders from './pages/Orders'
 import Payments from './pages/Payments'
+import { Role } from './enums/role'
+import Detail from './pages/TakeOrder'
+import TakeOrder from './pages/TakeOrder'
 
 function App() {
 
@@ -47,12 +50,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute allowedRoles={['ADMIN','WAITER']} />}>
+          <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN,Role.WAITER]}/>}>
             <Route element={<DashboardLayout />}>
               <Route path='/tables' element={<Tables />} />
               <Route path='/orders' element={<Orders />} />
               <Route path='/payments' element={<Payments />} />
             </Route>
+            <Route path='/detay' element={<TakeOrder/>}/>
           </Route>
         </Routes>
       </AuthProvider>
