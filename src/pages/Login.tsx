@@ -42,7 +42,7 @@ export default function Login(){
                     <div className={styles.logo}>
                     <ShopOutlined className={styles.logoIcon}/>
                     </div>
-                    <Title level={2}>Giriş Ekranı</Title>
+                    <Title level={2} style={{color:'#141414'}}>Giriş Ekranı</Title>
                 </div>
                 <Form
                     name="login"

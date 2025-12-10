@@ -36,7 +36,7 @@ function App() {
           itemBorderRadius:0,
         },
         Typography: {
-          colorTextHeading: '#141414'
+          colorTextHeading: isDark ? '#fff' : '#141414'
         },
         Input:{
           colorTextPlaceholder: 'rgba(255,255,255,0.75)'

@@ -6,6 +6,7 @@ import type { Tables } from "../types/tableType"
 export const tableService = {
     getTables: async () => {
         const response = await api.get<Tables[]>("/tables");
+        console.log(response.data)
         return response.data;
     },
 
