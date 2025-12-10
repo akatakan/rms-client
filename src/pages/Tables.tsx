@@ -1,4 +1,4 @@
-import { Spin, Alert, Card, Row, Col, Space, Tag } from "antd";
+import { Spin, Alert, Card, Row, Col,Tag, Button } from "antd";
 import {
     FormOutlined,
     CalendarOutlined,
@@ -7,6 +7,9 @@ import {
     TeamOutlined,
     ExclamationCircleFilled,
     ClockCircleOutlined,
+    PlusOutlined,
+    BarsOutlined,
+    ReloadOutlined,
 } from '@ant-design/icons';
 import { useTables } from "../hooks/useTables";
 import { TableStatus } from "../enums/table";
@@ -14,6 +17,8 @@ import styles from '../styles/Tables.module.css'
 import Title from "antd/es/typography/Title";
 import Paragraph from "antd/es/typography/Paragraph";
 import { useTheme } from "../context/ThemeContext";
+import { useNavigate } from "react-router-dom";
+import { tableService } from "../services/tableService";
 
 
 const statusConfig = {
@@ -23,7 +28,14 @@ const statusConfig = {
         icon: <CheckOutlined style={{ fontSize: '24px', color: '#52c41a' }} />,
         label: 'Boş',
         bottomStatusIcon: <CheckOutlined style={{fontSize:'24px',color: '#52c41a',marginRight:'5px'}}/>,
-        description: 'Müşteri alabilir.'
+        description: 'Müşteri alabilir.',
+        actionPath: {
+            action: async (id:string,status: string)=>{
+                await tableService.updateStatus(id,status);
+            },
+            label:'Durum Değiş',
+            icon: <ReloadOutlined/>
+        }
     },
     [TableStatus.READY_TO_ORDER]: {
         color: '#faad14',
@@ -31,7 +43,14 @@ const statusConfig = {
         icon: <FormOutlined style={{ fontSize: '24px', color: '#faad14' }} />, 
         label: 'Sipariş Alınacak',
         bottomStatusIcon: <ExclamationCircleFilled style={{fontSize:'24px',color: '#faad14',marginRight:'5px'}}/>,
-        description: 'Müşteri bekliyor, yönlenin.' 
+        description: 'Müşteri bekliyor, yönlenin.',
+        actionPath: {
+            action: async (id:string,status: string)=>{
+                await tableService.updateStatus(id,status);
+            },
+            label:'Durum Değiş',
+            icon: <ReloadOutlined/>
+        }
     },
     [TableStatus.OCCUPIED]: {
         color: '#f5222d',
@@ -39,7 +58,14 @@ const statusConfig = {
         icon: <TeamOutlined style={{ fontSize: '24px', color: '#f5222d' }} />,
         label: 'Dolu',
         bottomStatusIcon: <ClockCircleOutlined style={{fontSize:'24px',color: '#f5222d',marginRight:'5px'}}/>,
-        description: 'Sipariş verildi, servis sürüyor.' 
+        description: 'Sipariş verildi, servis sürüyor.',
+        actionPath: {
+            action: async (id:string,status: string)=>{
+                await tableService.updateStatus(id,status);
+            },
+            label:'Durum Değiş',
+            icon: <ReloadOutlined/>
+        }
     },
     [TableStatus.RESERVED]: {
         color: '#1890ff',
@@ -47,7 +73,14 @@ const statusConfig = {
         icon: <CalendarOutlined style={{ fontSize: '24px', color: '#1890ff' }} />,
         label: 'Rezerve',
         bottomStatusIcon: <CalendarOutlined style={{fontSize:'24px',color: '#1890ff',marginRight:'5px'}}/>,
-        description: 'Yakında gelecek.'
+        description: 'Yakında gelecek.',
+        actionPath: {
+            action: async (id:string,status: string)=>{
+                await tableService.updateStatus(id,status);
+            },
+            label:'Durum Değiş',
+            icon: <ReloadOutlined/>
+        }
     },
     [TableStatus.CLOSED]: {
         color: '#8c8c8c',
@@ -55,14 +88,20 @@ const statusConfig = {
         icon: <StopOutlined style={{ fontSize: '24px', color: '#8c8c8c' }} />,
         label: 'Kapalı',
         bottomStatusIcon: <StopOutlined style={{fontSize:'24px',color: '#8c8c8c',marginRight:'5px'}}/>,
-        description: 'Kullanım dışı.'
+        description: 'Kullanım dışı.',
+        actionPath: {
+            action: async(id:string,status: string)=>{
+                await tableService.updateStatus(id,status);
+            },
+            label:'Aktif Et',
+            icon: <PlusOutlined/>
+        }
     }
 };
 
 export default function Tables() {
     const { data: tables, isLoading, error } = useTables();
     const {isDark} = useTheme();
-
 
     if (isLoading) return <Spin size="large" style={{ display: 'block', margin: '50px auto' }} />;
     if (error) return <Alert title="Hata" description="Masalar yüklenemedi" type="error" style={{ margin: '25px' }} />;
@@ -95,6 +134,10 @@ export default function Tables() {
                                 <Paragraph style={{margin:0,color:config.color,fontWeight:500}}>
                                     {config.description}   
                                 </Paragraph>
+                            </div>
+                            <div style={{display:'flex',justifyContent:'space-evenly',height:50}}>
+                                <Button onClick={config.actionPath.action(table.id,TableStatus.CLOSED)} type="text" style={{width:'100%',height:'100%'}} icon={config.actionPath.icon}>{config.actionPath.label}</Button>
+                                <Button onClick={config.actionPath.action(table.id,TableStatus.AVAILABLE)} type="text" style={{width:'100%',height:'100%'}}><BarsOutlined/>Detay</Button>
                             </div>
                         </Card>
                     </Col>
